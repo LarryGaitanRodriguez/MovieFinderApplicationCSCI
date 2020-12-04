@@ -9,7 +9,7 @@ import java.util.Scanner;
 //************************************************************************************
 // DataScanner.java		Created By: Larry Gaitan-Rodriguez	Date: 11/24/2020
 //
-// Used to scan in files into the database. Makes use of DBconnection.java
+// Used to scan in data from files or into the database. Makes use of DBconnection.java
 //************************************************************************************
 
 public class DataScanner {
@@ -20,6 +20,7 @@ public class DataScanner {
 	public void scanMovieCastAndUpload()
 	{
 		Connection connect = DBConnection.connectToDB();
+		System.out.println("Scanning in all movie casts. May take a moment...");
 
 		try {
 			Scanner castReader = new Scanner(new FileInputStream(file));
@@ -35,6 +36,7 @@ public class DataScanner {
 				int movieID = Integer.parseInt(delimitedLine[0]);
 				int castID = Integer.parseInt(delimitedLine[1]);
 				String actorName = delimitedLine[2];
+				actorName = actorName.replace("\"", "");
 				PreparedStatement postNM = connect.prepareStatement("INSERT INTO movie_cast (movieID, castID, cname) "
 						+ "VALUES(?,?,?)");
 				postNM.setInt(1, movieID);
@@ -63,7 +65,6 @@ public class DataScanner {
 			Connection connect = DBConnection.connectToDB();
 
 			Scanner movieNameReader = new Scanner(new FileInputStream(file));
-
 			
 			//Goes thru the whole file to process the data and upload it
 			int mnCounter = 0;
@@ -78,6 +79,8 @@ public class DataScanner {
 				//be integers and the last one will be a name.
 				int movieID = Integer.parseInt(delimitedLine[0]);
 				String movieName = delimitedLine[1];
+				//Removing the quotation marks.
+				movieName = movieName.replace("\"", "");
 				int score = Integer.parseInt(delimitedLine[2]);
 				
 				PreparedStatement postNM = connect.prepareStatement("INSERT INTO movie_name_score (movieID, mname, mscore ) "

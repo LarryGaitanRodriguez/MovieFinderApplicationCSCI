@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.io.IOException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Map;
@@ -19,17 +20,18 @@ import java.util.concurrent.Executor;
 
 public class DBConnection {
 	
+	//Uploading the file with java then passing it over the the property reading object.
+	private static File configFile = new File("resources/db.properties");
+	private static ReadDBProperties dbConfig = new ReadDBProperties(configFile);
 	//Assigns the properties values to global variables
-	private static String url = ReadDBProperties.getURL();
-	private static String userName = ReadDBProperties.getUsername();
-	private static String password = ReadDBProperties.getPassword();
+	private static String url = dbConfig.getURL();
+	private static String userName = dbConfig.getUsername();
+	private static String password = dbConfig.getPassword();
 	private static Connection conn;
 	
 	public static Connection connectToDB(){
 		try {
-			System.out.println(url);
 			conn = DriverManager.getConnection(url, userName, password);
-			System.out.println("Successfully connected to the DB! :D");
 		} catch (SQLException e) {
 			e.printStackTrace();
             System.out.println("Failed to create the database connection! D:"); 

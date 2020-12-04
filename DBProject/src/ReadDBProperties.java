@@ -6,22 +6,28 @@ import java.util.Properties;
 
 //************************************************************************************
 // ReadProperties.java		Created By: Larry Gaitan-Rodriguez	Date: 11/24/2020
+//																Edited: 11/30/2020
 //
-// Used to import data from db.properties and return the data using getter methods.
+// Used to import data from a properties file and return the data using getter methods.
 //************************************************************************************
 
 public class ReadDBProperties {
-
+	File configFile;
+	
+	public ReadDBProperties(File file)
+	{
+		configFile = file;
+	}
+	
 	
 	//Creates the properties Object to read from the dbConfig
-	private static Properties dbProp = new Properties();
+	private  Properties dbProp = new Properties();
 	
-	//Pulls the config data from db.properties
-	private static void pullDBConfigData() {
+	//Pulls the configuration data from the properties file.
+	private void pullDBConfigData() {
 		try
 		{
-			File file = new File("resources/db.properties");
-			FileInputStream fileInput = new FileInputStream(file);
+			FileInputStream fileInput = new FileInputStream(configFile);
 			dbProp.load(fileInput);
 			fileInput.close();
 		}
@@ -38,17 +44,17 @@ public class ReadDBProperties {
 	
 	
 	//Following methods return property values
-	public static String getURL()
+	public String getURL()
 	{
 		pullDBConfigData();
 		return dbProp.getProperty("url");
 	}
-	public static String getUsername()
+	public String getUsername()
 	{
 		pullDBConfigData();
 		return dbProp.getProperty("username");
 	}
-	public static String getPassword()
+	public String getPassword()
 	{
 		pullDBConfigData();
 		return dbProp.getProperty("password");
