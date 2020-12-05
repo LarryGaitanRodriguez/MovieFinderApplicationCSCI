@@ -112,15 +112,38 @@ public class DBCommands {
 		Connection connect = DBConnection.connectToDB();
 		try
 		{
-			System.out.println("Prepping statement");
 			PreparedStatement prepStatement = connect.prepareStatement("SELECT * FROM movie_cast");
-			System.out.println("Prepping setting string");
-			System.out.println("Executing query");
 			ResultSet rs = prepStatement.executeQuery();
 			int i = 1;
 			while(rs.next())
 			{
 				System.out.println(i+" "+rs.getString(3));
+				i++;
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Critical error using actorLookup method.");
+			e.printStackTrace();
+		}
+	}
+	
+	//Selects and displays all the movies available and the scores
+	public static void allMovies()
+	{
+		Connection connect = DBConnection.connectToDB();
+		try
+		{
+			PreparedStatement prepStatement = connect.prepareStatement("SELECT * FROM movie_name_score");
+			ResultSet rs = prepStatement.executeQuery();
+			int i = 1;
+			while(rs.next())
+			{
+				int movieScore = rs.getInt(3);
+				if(movieScore == -1)
+					System.out.println(i+" "+rs.getString(2)+" which is not rated.");
+				else
+					System.out.println(i+" "+rs.getString(2)+"w/ score of : "+movieScore+".");
 				i++;
 			}
 		}
@@ -251,6 +274,67 @@ public class DBCommands {
 			e.printStackTrace();
 		}
 	}
+	public static void workedTogetherActors()
+	{
+		Connection connect = DBConnection.connectToDB();
+		try
+		{
+			PreparedStatement actorTogetherSearch = connect.prepareStatement(
+					"SELECT a.cname, b.cname, COUNT(b.movieID) movies_together "+
+					"FROM movie_cast a JOIN movie_cast b "+
+					"ON (a.movieID = b.movieID) "+
+					"WHERE a.cname <> b.cname "+
+					"GROUP BY a.cname, b.cname "+
+					"ORDER BY MAX(movies_together) DESC "+
+					"LIMIT 2");
+
+			ResultSet rs = actorTogetherSearch.executeQuery();
+			
+			while(rs.next())
+			{
+				String actorName1 = rs.getString(1);
+				String actorName2 = rs.getString(2);
+				int moviesTogether = rs.getInt(3);
+				
+				System.out.println(actorName1+" and "+actorName2+" worked in "+moviesTogether+" movies together.");
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Critical error using topActors method.");
+			e.printStackTrace();
+		}
+	}
+	//Top 10% of movies 
+	public static void top10PercentMovies()
+	{
+		Connection connect = DBConnection.connectToDB();
+		try
+		{
+			PreparedStatement actorTogetherSearch = connect.prepareStatement(
+					"SELECT Mname, Mscore "+
+					"FROM movie_name_score "+
+					"WHERE Mscore BETWEEN 90 AND 100;");
+
+			ResultSet rs = actorTogetherSearch.executeQuery();
+			
+			int count = 1;
+			while(rs.next())
+			{
+				String movieName = rs.getString(1);
+				int movieScore = rs.getInt(2);
+				
+				System.out.println("#"+count+" "+movieName+" with a score of "+movieScore);
+				count++;
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Critical error using topActors method.");
+			e.printStackTrace();
+		}
+	}
+
 	
 	//Method takes keyword to find a movie with the keyword (only one) in it.
 	

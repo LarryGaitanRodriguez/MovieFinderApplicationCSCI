@@ -1,5 +1,3 @@
-import java.io.File;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -29,7 +27,6 @@ public class MovieFinder{
 		{
 		Scanner userChoices = new Scanner(System.in);
 			int choice;
-			int userCount;
 			System.out.println("");
 			System.out.println("");
 
@@ -38,6 +35,10 @@ public class MovieFinder{
 			System.out.println("2: Look up a movie using a keyword.");
 			System.out.println("3: Look up top 10 actors.");
 			System.out.println("4: Look up top # actors.");
+			System.out.println("5: Look up actors who have performed in the most movies together");
+			System.out.println("6: show all actors in the database.");
+			System.out.println("7: Show all movies in the database.");
+			System.out.println("7: Show all top 10% of movies");
 			System.out.println("0: Exit");
 			choice = userChoices.nextInt();
 			switch(choice)
@@ -75,7 +76,30 @@ public class MovieFinder{
 					DBCommands.topActors(topActorCount);
 					break;
 				}
-				
+				case 5: 
+				{
+					System.out.println("All actors who have preformed in the most movies togehter");
+					DBCommands.workedTogetherActors();				
+					break;
+				}
+				case 6: 
+				{
+					System.out.println("All actors in the database");
+					DBCommands.allActors();
+					break;
+				}
+				case 7: 
+				{
+					System.out.println("All movies in the database");
+					DBCommands.allMovies();
+					break;
+				}
+				case 8:
+				{
+					System.out.println("Top 10% movies: ");
+					DBCommands.top10PercentMovies();
+					break;
+				}
 				case 0:
 				{
 					System.out.println("Thanks for coming.");
@@ -86,38 +110,9 @@ public class MovieFinder{
 					System.out.println("Please enter a valid input");
 				
 			}
-		} // end while 
-		
-		/*
-		//Cleans up the database
-		DBCommands.nukeBothTables();
-		
-		//Now we create the tables.
-		DBCommands.createBothTables();
-		
-		//Files are loaded onto the program and their contents are uploaded to the database
-		File MovieNS = new File("movie-name-score.txt");
-		DataScanner fileScanner = new DataScanner(MovieNS);
-		fileScanner.ScanNameAndUpload();
-		File MovieCast = new File("movie-cast.txt");
-		fileScanner.setFileUpload(MovieCast);
-		fileScanner.scanMovieCastAndUpload();
-		
-		/
-		*/
-		/*
-		while(true)
-		{
-			String userInput = input.nextLine();
-			DBCommands.actorLookup(userInput);
-			DBCommands.topActors();
-			DBCommands.topActors(100);
-			DBCommands.movieKeywordSearch("death");
-		}
-		*/
-		
-		
-		
+		} 
+
 	}
 }
+//Thank you very much to all the team for their hard work on this project. - Larry
 
